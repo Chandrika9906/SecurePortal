@@ -79,7 +79,6 @@ const uploadFile = async (fileBuffer, originalFilename, mimeType) => {
         {
           public_id: safeKey,
           resource_type: resourceType,
-          folder: 'portal-content',
           type: 'upload',
         },
         (error, result) => {
