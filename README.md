@@ -2,7 +2,7 @@
 
 A production-quality full-stack **MERN (MongoDB, Express, React, Node.js)** internal organizational portal for securely accessing training videos, PDF documentation, and interactive HTML reference materials.
 
-**Live Demo** → _add your Vercel URL here after deployment_
+**Live Demo** → https://secure-portal-frontend.vercel.app
 
 ---
 
