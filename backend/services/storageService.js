@@ -123,11 +123,17 @@ const uploadFile = async (fileBuffer, originalFilename, mimeType) => {
 const getSecureAccess = async (storageKey, storageMode) => {
   // Cloudinary signed URL (1 minute expiry)
   if (storageMode === 'cloudinary' || (useCloudinary && cloudinary)) {
+    // Derive resource type from storageKey extension
+    const ext = path.extname(storageKey).toLowerCase();
+    let resourceType = 'raw';
+    if (['.mp4', '.webm', '.ogv', '.mov'].includes(ext)) resourceType = 'video';
+    if (['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext)) resourceType = 'image';
+
     const expiresAt = Math.floor(Date.now() / 1000) + 300;
     const signedUrl = cloudinary.url(storageKey, {
       sign_url: true,
       expires_at: expiresAt,
-      resource_type: 'auto',
+      resource_type: resourceType,
       type: 'upload',
       secure: true,
     });

@@ -53,7 +53,7 @@ export const VideoViewer = ({ item }) => {
     <div className="space-y-4">
       {/* Resumed Banner */}
       {resumedTime && (
-        <div className="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20 text-xs text-brand-300 flex items-center justify-between">
+        <div className="p-3 rounded-xl bg-brand-50 border border-brand-200 text-xs text-brand-700 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <RotateCcw className="w-4 h-4 text-brand-400" />
             <span>Resumed playback from timestamp <strong>{resumedTime}</strong></span>
@@ -68,7 +68,7 @@ export const VideoViewer = ({ item }) => {
       )}
 
       {/* Video Container */}
-      <div className="relative rounded-2xl overflow-hidden bg-black border border-slate-800 shadow-2xl aspect-video group">
+      <div className="relative rounded-2xl overflow-hidden bg-black border border-slate-200 shadow-md aspect-video group">
         
         {/* HTML5 Video Element streaming from Range Endpoint */}
         <video
@@ -87,14 +87,14 @@ export const VideoViewer = ({ item }) => {
 
         {/* Security Deterrent Watermark Overlay */}
         <div className="absolute top-4 right-4 z-10 pointer-events-none select-none opacity-40 hover:opacity-80 transition">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/50 text-[10px] font-mono text-slate-300 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/70 border border-slate-600/50 text-[10px] font-mono text-white backdrop-blur-md">
             <Shield className="w-3.5 h-3.5 text-brand-400" />
             <span>PROTECTED STREAM • {user?.email}</span>
           </div>
         </div>
 
         {error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-slate-950/90 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-black/80 text-center">
             <AlertCircle className="w-12 h-12 text-rose-500 mb-2" />
             <h4 className="text-lg font-bold text-white">Video Stream Unavailable</h4>
             <p className="text-xs text-slate-400 mt-1 max-w-md">
@@ -105,10 +105,10 @@ export const VideoViewer = ({ item }) => {
       </div>
 
       {/* Security Architecture Callout */}
-      <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 flex items-start gap-3">
-        <Shield className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 flex items-start gap-3">
+        <Shield className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
         <div>
-          <strong className="text-slate-200">Content Security Architecture:</strong> This video is delivered via server-side HTTP range requests (`/api/content/:id/stream`). Playback timestamps are saved locally to seamlessly resume across sessions.
+          <strong className="text-slate-700">Content Security Architecture:</strong> This video is delivered via server-side HTTP range requests. Playback timestamps are saved locally to seamlessly resume across sessions.
         </div>
       </div>
     </div>
