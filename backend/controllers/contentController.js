@@ -82,16 +82,25 @@ exports.streamContent = async (req, res) => {
     // This keeps the actual storage URL off the main page source but
     // still allows <video>, <iframe>, fetch() to load it temporarily.
     if (access.type === 'signedUrl') {
-      // For video, we let the signed URL handle range requests directly
-      // For PDF/HTML we proxy the content to avoid exposing the raw URL
       if (item.contentType === 'VIDEO') {
-        return res.redirect(302, access.url);
+        // Proxy video with range request support
+        const range = req.headers.range;
+        const headers = { 'Range': range || 'bytes=0-' };
+        const upstream = await fetch(access.url, { headers });
+        if (!upstream.ok && upstream.status !== 206) throw new Error('Failed to retrieve video from storage.');
+        res.setHeader('Content-Type', item.mimeType || 'video/mp4');
+        res.setHeader('Accept-Ranges', 'bytes');
+        res.setHeader('Cache-Control', 'no-store, private');
+        if (upstream.headers.get('content-range')) res.setHeader('Content-Range', upstream.headers.get('content-range'));
+        if (upstream.headers.get('content-length')) res.setHeader('Content-Length', upstream.headers.get('content-length'));
+        res.status(upstream.status === 206 ? 206 : 200);
+        Readable.fromWeb(upstream.body).pipe(res);
+        return;
       }
 
-      // For PDF & HTML: proxy the content through the authenticated endpoint
+      // For PDF & HTML: proxy the content
       const upstream = await fetch(access.url);
       if (!upstream.ok) throw new Error('Failed to retrieve content from storage.');
-
       res.setHeader('Content-Type', item.mimeType);
       res.setHeader('Cache-Control', 'no-store, private');
       res.setHeader('Content-Disposition', 'inline');
