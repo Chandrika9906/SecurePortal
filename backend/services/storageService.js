@@ -79,7 +79,14 @@ const uploadFile = async (fileBuffer, originalFilename, mimeType) => {
           folder: 'portal-content',
           type: 'upload',
         },
-        (error, result) => error ? reject(error) : resolve(result)
+        (error, result) => {
+          if (error) {
+            console.error('[Cloudinary Upload Error]:', JSON.stringify(error));
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
       );
       const { Readable } = require('stream');
       Readable.from(fileBuffer).pipe(stream);
