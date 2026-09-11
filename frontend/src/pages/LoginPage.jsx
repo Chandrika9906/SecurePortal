@@ -6,7 +6,7 @@ export const LoginPage = ({ onBack }) => {
   const { loginWithGoogle, demoLogin, authError, loading } = useAuth();
   const [localError, setLocalError] = useState('');
 
-  const rawClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const rawClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '125774813734-o7fik4vrq290l3q76g47t7jsqr4je87j.apps.googleusercontent.com';
   const isGoogleConfigured =
     rawClientId &&
     rawClientId !== 'your-google-client-id.apps.googleusercontent.com' &&
