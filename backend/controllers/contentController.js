@@ -86,8 +86,10 @@ exports.streamContent = async (req, res) => {
         // Proxy video with range request support
         const range = req.headers.range;
         const headers = { 'Range': range || 'bytes=0-' };
+        console.log('[Stream] Fetching video from:', access.url);
         const upstream = await fetch(access.url, { headers });
-        if (!upstream.ok && upstream.status !== 206) throw new Error('Failed to retrieve video from storage.');
+        console.log('[Stream] Upstream status:', upstream.status);
+        if (!upstream.ok && upstream.status !== 206) throw new Error(`Failed to retrieve video from storage. Status: ${upstream.status}`);
         res.setHeader('Content-Type', item.mimeType || 'video/mp4');
         res.setHeader('Accept-Ranges', 'bytes');
         res.setHeader('Cache-Control', 'no-store, private');
