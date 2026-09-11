@@ -77,7 +77,7 @@ const uploadFile = async (fileBuffer, originalFilename, mimeType) => {
           public_id: safeKey,
           resource_type: resourceType,
           folder: 'portal-content',
-          access_mode: 'authenticated', // private — requires signed URL
+          type: 'upload',
         },
         (error, result) => error ? reject(error) : resolve(result)
       );
@@ -114,9 +114,12 @@ const uploadFile = async (fileBuffer, originalFilename, mimeType) => {
 const getSecureAccess = async (storageKey, storageMode) => {
   // Cloudinary signed URL (1 minute expiry)
   if (storageMode === 'cloudinary' || (useCloudinary && cloudinary)) {
-    const signedUrl = cloudinary.utils.private_download_url(storageKey, '', {
-      expires_at: Math.floor(Date.now() / 1000) + 60,
-      attachment: false,
+    const expiresAt = Math.floor(Date.now() / 1000) + 300; // 5 min
+    const signedUrl = cloudinary.url(storageKey, {
+      sign_url: true,
+      expires_at: expiresAt,
+      resource_type: 'auto',
+      type: 'upload',
     });
     return { type: 'signedUrl', url: signedUrl };
   }
